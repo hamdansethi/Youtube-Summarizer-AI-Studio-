@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>YouTube Video Summarizer</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-gray-100 text-gray-800 font-sans">
+  <div class="min-h-screen flex items-center justify-center px-4">
+    <div class="bg-white shadow-lg rounded-xl p-8 max-w-xl w-full">
+      <h1 class="text-2xl font-bold mb-4 text-center text-blue-600">YouTube Video Summarizer</h1>
+      <p class="text-sm text-gray-600 mb-6 text-center">
+        Paste a YouTube video URL below to generate a summary using AI.
+      </p>
+
+      <input
+        id="url"
+        type="text"
+        placeholder="https://www.youtube.com/watch?v=..."
+        class="w-full border border-gray-300 rounded-md p-3 mb-4 focus:outline-none focus:ring-2 focus:ring-blue-400"
+      />
+
+      <button
+        onclick="summarize()"
+        class="w-full bg-blue-600 hover:bg-blue-700 text-white py-2 px-4 rounded-md transition duration-200"
+      >
+        Summarize Video
+      </button>
+
+      <div id="loader" class="hidden text-center mt-4 text-sm text-gray-500">Summarizing...</div>
+
+      <div id="result" class="mt-6 bg-gray-50 p-4 rounded-md border border-gray-200 text-sm whitespace-pre-wrap hidden"></div>
+    </div>
+  </div>
+
+  <script>
+    async function summarize() {
+      const urlInput = document.getElementById("url");
+      const result = document.getElementById("result");
+      const loader = document.getElementById("loader");
+
+      const videoUrl = urlInput.value.trim();
+      if (!videoUrl) {
+        alert("Please enter a YouTube URL.");
+        return;
+      }
+
+      result.classList.add("hidden");
+      loader.classList.remove("hidden");
+
+      try {
+        const response = await fetch("/summarize", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({ video_url: videoUrl }),
+        });
+
+        const data = await response.json();
+        loader.classList.add("hidden");
+
+        result.innerText = data.summary || data.error || "Unexpected error occurred.";
+        result.classList.remove("hidden");
+      } catch (err) {
+        loader.classList.add("hidden");
+        result.innerText = "Failed to fetch summary. Please try again.";
+        result.classList.remove("hidden");
+      }
+    }
+  </script>
+</body>
+</html>

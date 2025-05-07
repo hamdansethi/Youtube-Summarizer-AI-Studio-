@@ -1,0 +1,38 @@
+# Byte-compiled / optimized / DLL files
+__pycache__/
+*.py[cod]
+*$py.class
+
+# Flask environment
+instance/
+.env
+.venv/
+venv/
+env/
+ENV/
+*.env
+
+# PyInstaller
+*.spec
+
+# macOS
+.DS_Store
+
+# VSCode
+.vscode/
+
+# Logs
+*.log
+
+# Python virtual environment
+*.egg-info/
+dist/
+build/
+
+# Node modules (if any frontend build tool used)
+node_modules/
+
+# Frontend build output (optional)
+*.out
+*.cache
+*.parcel-cache
